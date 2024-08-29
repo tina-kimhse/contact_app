@@ -2,24 +2,16 @@
 // commonJS Module : require, module.export 또는 ewports
 
 // const express = require('express')
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
+const app = express();
 
-const app = express()
+import userRouter from "./routers/userRouter.js";
 
-app.get('/', function (req, res) {
-    res.send('GET 요청!')
-  });
+// middleware
+app.use(express.json()); //json 데이터를 처리
+app.use("/", userRouter);
 
-app.post('/', function (req, res) {
-  res.send('POST 요청!')
-});
-
-app.put('/', function (req, res) {
-    res.send('POST 요청!')
-  });
-
-  app.patch('/', function (req, res) {
-    res.send('Patch 요청!')
-  });
 
 app.listen(3000)
