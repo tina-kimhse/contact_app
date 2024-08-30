@@ -27,9 +27,87 @@ const createUser = async (req, res) => {
         console.log('Error : ' + error);
     } 
 }
-// removeUser, modifyUser, deleteUser
+// removeUser, modifyUser, deleteUser,  +  
+const findAllusers = async (req, res) => {
+    try {
+         const user = await db.User.findAll();
+         
+         res.json({
+            status: 200,
+            user
+         })
+    } catch (error) {
+        console.log("에러메세지 : " + error);
+    }
+    
+}
+
+const findOneUser = async (req, res) => {
+    try {
+        const foundUser = await db.User.findAll({
+            where: {
+                id: req.params.id
+            }
+        });  
+
+        if (!foundUser) {
+            res.json({
+                status: 500,
+                user //
+            })
+        } else {
+            res.json({
+                starus: 20,
+                data: foundUser
+            })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+        
+const updateUser = async (req, res) => {
+    try {
+        const result = await db.User.update(
+            { email: req.body.email })
+            {
+                where: {
+                    id: req.body.id
+                }
+            }
+    } catch (error) {
+        console.log(error);
+    }
+}
+const removeUser = async (req, res) => {
+    try {
+        const removeUser = await db.User.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const removeAllUsers = async (req, res) => {
+    try {
+        const removeUser = await db.User.destroy({
+            truncate: true
+    })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const userCotrol = {
-    createUser
+    createUser,
+    findAllusers,
+    findOneUser,
+    updateUser,
+    removeUser,
+    removeAllUsers
 }
 
 export default userCotrol;

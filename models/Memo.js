@@ -1,9 +1,9 @@
 //const { Sequelize, DataTypes, Model } = 'requelize');
 import { Sequelize, DataTypes, Model } from "sequelize";
-import Memo from "./Memo";
+import { FOREIGNKEYS } from "sequelize/lib/query-types";
 // Sequelize의 defaultValue는 Null
 
-class User extends Model {
+class Memo extends Model {
     static init(sequelize) {
         return super.init(
             {
@@ -13,20 +13,14 @@ class User extends Model {
                     allowNull: false
                     
                 },
-                phone: {
-                    type: DataTypes.STRING(11),
-                    allowNull: false,
-                    unique: true
-                 
+                user_id: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
                 },
-                email: {
+                memo: {
                     type: DataTypes.STRING(100),
-                    defaultValue: null
-                    // allowNull is true : default
-                },
-                relationship: {
-                    type: DataTypes.ENUM('family', 'friend', 'others'),
-                    defaultValue: null
+                    allowNull: false
+                    
                 },
                 created_at: {
                     type: DataTypes.DATE,
@@ -39,8 +33,8 @@ class User extends Model {
                 sequelize, // DB 연결을 위한 시퀄라이즈 인스턴스
                 timestamps: false,
                 underscored: true,
-                modelName: 'User', // 시퀄라이즈 모델 이름
-                tableName: 'users', // 데이터베이스 테이블 이름 (기본값 : 모델이름을 s | 복수형)
+                modelName: 'Memo', // 시퀄라이즈 모델 이름
+                tableName: 'memo', // 데이터베이스 테이블 이름 (기본값 : 모델이름을 s | 복수형)
                 paranoid: false, // 테이블 삭제 후 복구를 원하면 true, 아니면 false (삭제날짜를 기록)
                 charset: 'utf8mb4', // 이모지 삽입을 위해서는 utf8mb4 형식
                 collate: "utf8mb4_general_ci"
@@ -48,11 +42,10 @@ class User extends Model {
         );
     }
     static associations(db) {
-        User.hasMany (db.Memo, { foreignKey: user_id, sourceKey: id })
+      db.User.belongsTo(db.User, { foreignkey: "user_id", targetkey: "id"});      
     }
 }
 
 
-
-export default User;
-// the defined model is the class itself
+export default Memo;
+// 모델 외부에서 User 정보를 
